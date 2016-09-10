@@ -1,0 +1,11 @@
+## Dependencies
+/node_modules
+/typings
+
+## Output
+
+/tmp
+/dist
+
+## IDE
+/.vscode
