@@ -1,25 +1,25 @@
 {
-  "private": true,
   "name": "xanite-package-manager",
   "version": "0.1.0",
-  "description": "A package manager for Xanite, built on top of pnpm.",
-  "scripts": {
-    "bootstrap": "npm install & tsc"
-  },
+  "description": "The package manager for Xanites modular ecosystem.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xanite/xpm.git"
   },
+  "author": "Connor Hartley <vectrixu+gh@gmail.com",
+  "license": "GPL-3.0",
+  "private": true,
   "bugs": {
     "url": "https://github.com/xanite/xpm/issues"
   },
   "homepage": "https://github.com/xanite/xpm#readme",
   "dependencies": {
-    "pnpm": "^0.31.2",
+    "pnpm": "^0.35.0",
     "typescript": "^1.8.10",
     "typings": "^1.3.3"
   },
   "devDependencies": {
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "tslint": "^3.15.1"
   }
 }

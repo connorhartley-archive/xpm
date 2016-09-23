@@ -1,12 +1,24 @@
 # XPM - Xanite Package Manager
 
-XPM (based on [apm](https://github.com/atom/apm)) is built on top of [pnpm](https://github.com/rstacruz/pnpm) instead
-of [npm](https://github.com/npm/npm), to make use of pnpm's speed and flat file structure, and uses GitHub as
-a registry instead of [npmjs.com](https://npmjs.com), all while ensuring native modules
+> The package manager for Xanites modular ecosystem.
+
+XPM (based on [apm][apm]) is built on top of [pnpm][pnpm] to make use
+of its speed and flat file structure for dependencies. XPM uses GitHub as
+a registry instead of [npmjs.com][npm-website], all while ensuring native modules
 are built against Chromium's v8 headers.
 
-tl;dr: apm that wraps pnpm instead of npm that can also compile preprocessed modules.
+This README along with the project is a work in progress.
 
-XPM will also compile preprocessed modules before installing, for the following languages.
+## Credits
 
- - TypeScript
+| ![connor][connor-avatar] |
+| :---: |
+| [Connor Hartley][connor-link] |
+
+  [connor-avatar]: https://avatars0.githubusercontent.com/u/12867785?v=3&s=125
+  [connor-link]: https://github.com/connorhartley
+
+  [apm]: https://github.com/atom/apm
+  [npm]: https://github.com/npm/npm
+  [pnpm]: https://github.com/rstacruz/pnpm
+  [npm-website]: https://npmjs.com
