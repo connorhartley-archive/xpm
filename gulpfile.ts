@@ -7,6 +7,6 @@ const project = typescript.createProject("tsconfig.json");
 
 gulp.task("compile:typescript", () => {
   let result = project.src()
-        .pipe(typescript(project));
+        .pipe(project());
   return result.js.pipe(gulp.dest("lib"));
 });
