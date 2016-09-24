@@ -1,4 +1,5 @@
 # XPM - Xanite Package Manager
+[![Dependency Status](https://david-dm.org/xanite/xpm/status.svg)](https://david-dm.org/xanite/xpm) [![Dev Dependency Status](https://david-dm.org/xanite/xpm/dev-status.svg)](https://david-dm.org/xanite/xpm?type=dev)
 
 > The package manager for Xanites modular ecosystem.
 
