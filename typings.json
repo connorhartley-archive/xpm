@@ -2,7 +2,10 @@
   "name": "xanite-package-manager",
   "dependencies": {},
   "globalDependencies": {
-    "node": "registry:dt/node#6.0.0+20160921192128"
+    "blessed": "registry:dt/blessed#0.1.81+20160807021644",
+    "minimist": "registry:dt/minimist#1.1.3+20160317120654",
+    "node": "registry:dt/node#6.0.0+20160923124626",
+    "underscore": "registry:dt/underscore#1.8.3+20160908111004"
   },
   "globalDevDependencies": {
     "gulp": "registry:dt/gulp#3.8.0+20160907112908"
