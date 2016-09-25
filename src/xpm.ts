@@ -1,11 +1,12 @@
 "use strict";
 
+import blessed = require("blessed");
 import minimist = require("minimist");
 import _ = require("underscore");
 
 const installCommand = require("./commands/install");
 
-let argv = minimist(process.argv.slice(2));
+const argv = minimist(process.argv.slice(2));
 
 export interface CommandObject {
   action: string;
@@ -14,6 +15,12 @@ export interface CommandObject {
 }
 
 export const queryCommand = command(argv);
+
+export const screenInterface: blessed.widget.Screen = blessed.screen({
+  smartCSR: true,
+  fastCSR: true,
+  autoPadding: true,
+});
 
 init();
 
@@ -46,7 +53,7 @@ function init(): void {
 
   switch (command.action) {
     case "install": {
-      return installCommand(command);
+      return installCommand(command, screen);
     }
   }
 }
