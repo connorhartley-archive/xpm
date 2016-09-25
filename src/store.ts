@@ -5,7 +5,6 @@ import path = require("path");
 import fs = require("fs");
 import child_process = require("child_process");
 
-// These dependencies have no typescript declaration.
 const osenv = require("osenv");
 const userHome = require("user-home");
 const xdgBasedir = require("xdg-basedir");
@@ -26,6 +25,7 @@ export function getCacheDirectory(): string {
   return path.join(xdgBasedir.cache, "xpm") || path.join(os.tmpdir, osenv.user(), ".xpm", "/cache");
 }
 
+// TODO: Clean this function up!
 export function getResourcePath(callback): void {
   if (process.env.XANITE_RESOURCE_PATH) {
     return process.nextTick(() => {

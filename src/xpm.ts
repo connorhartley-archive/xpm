@@ -41,7 +41,7 @@ function command(argv): Function {
   };
 }
 
-function init() {
+function init(): void {
   let command = queryCommand();
 
   switch (command.action) {
