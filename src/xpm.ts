@@ -19,7 +19,7 @@ export const queryCommand = command(argv);
 export const screenInterface: blessed.widget.Screen = blessed.screen({
   smartCSR: true,
   fastCSR: true,
-  autoPadding: true,
+  autoPadding: true
 });
 
 init();
