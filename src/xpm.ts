@@ -16,10 +16,8 @@ export interface CommandObject {
 
 export const queryCommand = command(argv);
 
-export const screenInterface: blessed.widget.Screen = blessed.screen({
-  smartCSR: true,
-  fastCSR: true,
-  autoPadding: true
+export const screen = blessed.screen({
+  smartCSR: true
 });
 
 init();
@@ -52,8 +50,9 @@ function init(): void {
   let command = queryCommand();
 
   switch (command.action) {
-    case "install": {
-      return installCommand(command, screen);
-    }
+    case "i":
+    case "install":
+      installCommand(command, screen);
+      break;
   }
 }
