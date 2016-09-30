@@ -4,9 +4,12 @@ import blessed = require("blessed");
 import minimist = require("minimist");
 import _ = require("underscore");
 
-const installCommand = require("./commands/install");
+const store = require("./store");
+const install = require("./commands/install")(this, store);
 
 const argv = minimist(process.argv.slice(2));
+
+let screen = null;
 
 export interface CommandObject {
   action: string;
@@ -14,15 +17,25 @@ export interface CommandObject {
   arguments: Object[];
 }
 
-export const queryCommand = command(argv);
+export const queryCommand: () => CommandObject = command(argv);
 
-export const screen = blessed.screen({
-  smartCSR: true
-});
+export function getPrefix(action: string): string {
+  return " {blue-fg}♫{/blue-fg} {blue-fg}xpm{/blue-fg} {yellow-fg}" + action + "{/yellow-fg} ";
+}
+
+export function getScreen(): blessed.widget.Screen {
+  if (!screen) screen = blessed.screen({ smartCSR: true });
+  return screen;
+}
+
+export function createBox(): blessed.widget.Box {
+  return blessed.box({ left: "center", width: "100%", tags: true });
+}
 
 init();
 
-function command(argv): Function {
+// Move somewhere else.
+function command(argv): () => CommandObject {
   function parseFlags(argv): Array<Object> {
     let flags = [];
     _.map(argv, function(value, key) {
@@ -46,13 +59,13 @@ function command(argv): Function {
   };
 }
 
-function init(): void {
+function init (): void {
   let command = queryCommand();
 
   switch (command.action) {
     case "i":
     case "install":
-      installCommand(command, screen);
+      install(command);
       break;
   }
 }
