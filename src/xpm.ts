@@ -4,14 +4,17 @@ import blessed = require("blessed");
 import minimist = require("minimist");
 import _ = require("underscore");
 
+exports = module.exports = {};
+
 const store = require("./store");
-const install = require("./commands/install")(this, store);
+
+const install = require("./commands/install")(exports, store);
 
 const argv = minimist(process.argv.slice(2));
 
 let screen = null;
 
-export interface CommandObject {
+interface CommandObject {
   action: string;
   attributes: string[];
   arguments: Object[];
@@ -19,24 +22,24 @@ export interface CommandObject {
 
 export const queryCommand: () => CommandObject = command(argv);
 
-export function getPrefix(action: string): string {
+export function getPrefix (action: string): string {
   return " {blue-fg}♫{/blue-fg} {blue-fg}xpm{/blue-fg} {yellow-fg}" + action + "{/yellow-fg} ";
 }
 
-export function getScreen(): blessed.widget.Screen {
+export function getScreen (): blessed.widget.Screen {
   if (!screen) screen = blessed.screen({ smartCSR: true });
   return screen;
 }
 
-export function createBox(): blessed.widget.Box {
+export function createBox (): blessed.widget.Box {
   return blessed.box({ left: "center", width: "100%", tags: true });
 }
 
 init();
 
 // Move somewhere else.
-function command(argv): () => CommandObject {
-  function parseFlags(argv): Array<Object> {
+export function command (argv): () => CommandObject {
+  function parseFlags (argv): Array<Object> {
     let flags = [];
     _.map(argv, function(value, key) {
       if (value || value !== "false") {
@@ -49,7 +52,7 @@ function command(argv): () => CommandObject {
     });
     return flags;
   }
-  return function parse(): CommandObject {
+  return function parse (): CommandObject {
     let command: CommandObject = {
       action: argv._[0],
       attributes: argv._.slice(1),
@@ -59,7 +62,7 @@ function command(argv): () => CommandObject {
   };
 }
 
-function init (): void {
+export function init (): void {
   let command = queryCommand();
 
   switch (command.action) {
