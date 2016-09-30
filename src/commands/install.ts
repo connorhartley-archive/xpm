@@ -4,7 +4,7 @@ import blessed = require("blessed");
 
 import cli = require("../index");
 import store = require("../store");
-import commandLine = require("../utils/commandLine");
+import cmdLn = require("../utils/commandLine");
 
 module.exports = install;
 
@@ -13,10 +13,10 @@ export const prefix: string = " {blue-fg}♫{/blue-fg} {blue-fg}xpm{/blue-fg} {y
 
 function install (view, args) {
   const prefix: string = exports.prefix;
-  const messageBox = commandLine(view);
+  const messageBox: cmdLn.LineMethods = cmdLn.createMessageBox(view);
 
   const packages: string[] = args.attributes;
   const flags: Object[] = args.arguments;
 
-  messageBox.addLine("test");
+  messageBox(exports.prefix + "Appending package(s).", 0);
 }
