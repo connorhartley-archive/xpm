@@ -1,5 +1,5 @@
 # XPM - Xanite Package Manager
-[![Build Status](https://travis-ci.org/xanite/xpm.svg?branch=master)](https://travis-ci.org/xanite/xpm) [![Coverage Status](https://coveralls.io/repos/github/xanite/xpm/badge.svg?branch=master)](https://coveralls.io/github/xanite/xpm?branch=master) [![Code Style](https://img.shields.io/badge/code%20style-tslint--config--xo-5ed9c7.svg)(https://github.com/mrmlnc/tslint-config-xo)]
+[![Build Status](https://travis-ci.org/xanite/xpm.svg?branch=master)](https://travis-ci.org/xanite/xpm) [![Coverage Status](https://coveralls.io/repos/github/xanite/xpm/badge.svg?branch=master)](https://coveralls.io/github/xanite/xpm?branch=master) [![Code Style](https://img.shields.io/badge/code%20style-tslint--config--xo-5ed9c7.svg)](https://github.com/mrmlnc/tslint-config-xo)
 
 > The package manager for Xanites modular ecosystem.
 
