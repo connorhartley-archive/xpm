@@ -1,66 +1,68 @@
-"use strict";
+'use strict';
 
-import blessed = require("blessed");
+import blessed = require('blessed');
 
 export function createMessageBox(view: blessed.widget.Screen): MessageBoxMethods {
-  let message: blessed.widget.Box = null;
-  let messageText: blessed.widget.Box[] = [];
+	let message: blessed.widget.Box = null;
+	const messageText: blessed.widget.Box[] = [];
 
-  (<MessageBoxMethods> add).add = add;
-  (<MessageBoxMethods> add).edit = edit;
-  (<MessageBoxMethods> add).remove = remove;
-  return <MessageBoxMethods> add;
+	(<MessageBoxMethods> add).add = add;
+	(<MessageBoxMethods> add).edit = edit;
+	(<MessageBoxMethods> add).remove = remove;
+	return <MessageBoxMethods> add;
 
-  function add (text: string, id: number) {
-    if (!message) message = blessed.box({ width: view.width, top: id, left: "center" });
+	function add (text: string, id: number) {
+		if (!message) {
+			message = blessed.box({ width: view.width, top: id, left: 'center' });
+		}
 
-    message.top = id;
+		message.top = id;
 
-    let line = blessed.box({ height: 1, top: id, left: 1, right: 1, content: text, tags: true });
+		const line = blessed.box({ height: 1, top: id, left: 1, right: 1, content: text, tags: true });
 
-    message.append(line);
-    view.append(message);
+		message.append(line);
+		view.append(message);
 
-    view.on("resize", function() {
-      message.width = view.width;
-      view.render();
-    });
+		view.on('resize', function() {
+			message.width = view.width;
+			view.render();
+		});
 
-    message.show();
-    line.show();
+		message.show();
+		line.show();
 
-    messageText[id] = line;
+		messageText[id] = line;
 
-    view.render();
+		view.render();
 
-    return id;
-  }
+		return id;
+	}
 
-  function edit (text: string, id: number) {
-    let msgTxt = messageText[id];
+	function edit (text: string, id: number) {
+		const msgTxt = messageText[id];
 
-    msgTxt.setContent(text);
-    msgTxt.show();
+		msgTxt.setContent(text);
+		msgTxt.show();
 
-    messageText[id] = msgTxt;
+		messageText[id] = msgTxt;
 
-    view.render();
+		view.render();
 
-    return id;
-  }
+		return id;
+	}
 
-  function remove (id: number) {
-    let msgTxt = messageText[id];
+	function remove (id: number) {
+		const msgTxt = messageText[id];
 
-    msgTxt.destroy();
+		msgTxt.destroy();
 
-    view.render();
-  }
+		view.render();
+	}
 }
 
 export interface MessageBoxMethods {
-  (text: string, id?: number): number;
-  add(text: string, id?: number): number;
-  edit(text: string, id: number): void;
-  remove(id: number): void;
+	(text: string, id?: number): number;
+	add(text: string, id?: number): number;
+	edit(text: string, id: number): void;
+	remove(id: number): void;
 }
