@@ -1,5 +1,5 @@
 # XPM - Xanite Package Manager
-[![Dependency Status](https://david-dm.org/xanite/xpm/status.svg)](https://david-dm.org/xanite/xpm) [![Dev Dependency Status](https://david-dm.org/xanite/xpm/dev-status.svg)](https://david-dm.org/xanite/xpm?type=dev)
+[![Build Status](https://travis-ci.org/xanite/xpm.svg?branch=master)](https://travis-ci.org/xanite/xpm) [![Coverage Status](https://coveralls.io/repos/github/xanite/xpm/badge.svg?branch=master)](https://coveralls.io/github/xanite/xpm?branch=master) [![Code Style](https://img.shields.io/badge/code%20style-tslint--config--xo-5ed9c7.svg)(https://github.com/mrmlnc/tslint-config-xo)]
 
 > The package manager for Xanites modular ecosystem.
 
@@ -9,6 +9,10 @@ a registry instead of [npmjs.com][npm-website], all while ensuring native module
 are built against Chromium's v8 headers.
 
 This README along with the project is a work in progress.
+
+#### Dependency Status
+
+[![Dependency Status](https://david-dm.org/xanite/xpm/status.svg)](https://david-dm.org/xanite/xpm) [![Dev Dependency Status](https://david-dm.org/xanite/xpm/dev-status.svg)](https://david-dm.org/xanite/xpm?type=dev)
 
 ## Credits
 
