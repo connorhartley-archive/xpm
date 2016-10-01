@@ -9,6 +9,10 @@ import argv = require("./utils/commandParser");
 let view = null;
 let terminal = null;
 
+export const commands = {
+  install: require("./commands/install")()
+};
+
 export function init (): void {
   let command: argv.ParsedCommand = argv.parse(process.argv.slice(2));
 
@@ -17,7 +21,7 @@ export function init (): void {
   switch (command.action) {
     case "i":
     case "install":
-      require("./commands/install")(view, command);
+      commands.install(command, view);
       break;
   }
 }

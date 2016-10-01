@@ -2,14 +2,14 @@
 
 import blessed = require("blessed");
 
-export function createMessageBox(view: blessed.widget.Screen): LineMethods {
+export function createMessageBox(view: blessed.widget.Screen): MessageBoxMethods {
   let message: blessed.widget.Box = null;
   let messageText: blessed.widget.Box[] = [];
 
-  (<LineMethods> add).add = add;
-  (<LineMethods> add).edit = edit;
-  (<LineMethods> add).remove = remove;
-  return <LineMethods> add;
+  (<MessageBoxMethods> add).add = add;
+  (<MessageBoxMethods> add).edit = edit;
+  (<MessageBoxMethods> add).remove = remove;
+  return <MessageBoxMethods> add;
 
   function add (text: string, id: number) {
     if (!message) message = blessed.box({ width: view.width, top: id, left: "center" });
@@ -58,7 +58,7 @@ export function createMessageBox(view: blessed.widget.Screen): LineMethods {
   }
 }
 
-export interface LineMethods {
+export interface MessageBoxMethods {
   (text: string, id?: number): number;
   add(text: string, id?: number): number;
   edit(text: string, id: number): void;
