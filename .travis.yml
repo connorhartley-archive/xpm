@@ -3,6 +3,7 @@ node_js:
   - '6'
 install:
   - npm install -g npm
+  - npm install -g node-gyp
   - npm install -g typings
   - typings install
   - npm install
