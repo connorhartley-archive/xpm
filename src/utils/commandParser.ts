@@ -3,13 +3,13 @@
 import minimist = require('minimist');
 import _ = require('underscore');
 
-export function parse (args): ParsedCommand {
-	const argv = minimist(args);
-	const flags = [];
+export function parse (args: string[]): ParsedCommand {
+	const argv: minimist.ParsedArgs = minimist(args);
+	const flags: Flag[] = [];
 
-	_.map(argv, function(value, key) {
+	_.map(argv, function(value: string | boolean, key: string) {
 		if (value || value !== 'false') {
-			const obj = {
+			const obj: Flag = {
 				key: key,
 				value: value
 			};
@@ -26,8 +26,13 @@ export function parse (args): ParsedCommand {
 	return command;
 }
 
+export interface Flag {
+	key: string;
+	value: string | boolean;
+}
+
 export interface ParsedCommand {
 	action: string;
 	attributes: string[];
-	flags: Object[];
+	flags: Flag[];
 }
