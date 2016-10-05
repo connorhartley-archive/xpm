@@ -2,13 +2,12 @@
 
 import path = require('path');
 
-const userHome = require('user-home')();
+const userHome = require('user-home');
 const xdgBasedir = require('xdg-basedir');
 
 export const getHomeDirectory: string = userHome;
 export const getResourceDirectory: string = path.join(xdgBasedir.data, 'xpm') || path.join(getHomeDirectory, '.xpm');
 export const getConfigDirectory: string = path.join(xdgBasedir.config, 'xpm') || path.join(getHomeDirectory, '.xpm', 'config');
-export const getCacheDirectory: string = path.join(xdgBasedir.cache, 'xpm') || path.join(getHomeDirectory, '.xpm', 'cache');
 
 export const getPlatformName: string = process.env.XANITE_PLATFORM_NAME || 'electron';
 export const getPlatformVersion: string = process.env.XANITE_PLATFORM_VERSION || '1.4.1';
