@@ -24,9 +24,10 @@ export function install (): Install {
   (<Install> run).run = run;
   (<Install> run).installNode = installNode;
   (<Install> run).installManager = installManager;
+  (<Install> run).installModule = installModule;
   return <Install> run;
 
-  function run (args, view?) {
+  function run (args?, view?) {
     if (!view) {
       currentView = view
     }
@@ -96,12 +97,10 @@ export function install (): Install {
 
     fs.mkdirSync(store.getSharedDirectory);
 
-    const pnpm = path.join(store.getPackageManagerDirectory, 'lib', 'bin', 'pnpm')
-
     const sharedInput = ['config', 'set', 'store-path']
     sharedInput.push(store.getSharedDirectory)
 
-    commandExecutor.executeCommand(require.resolve(pnpm), sharedInput, opts, (exitCode, error, output) => {
+    commandExecutor.executeCommand(store.getPackageManagerEntry, sharedInput, opts, (exitCode, error, output) => {
       if(exitCode === 0) {
         message.edit(exports.setupPrefix + 'Configured pnpm with success.')
         callback()
@@ -110,6 +109,10 @@ export function install (): Install {
       }
     });
   }
+
+  function installModule () {
+    // Temp
+  }
 }
 
 export interface Install {
@@ -117,4 +120,5 @@ export interface Install {
   run(args: argumentParser.ParsedCommand, view: blessed.widget.Screen): void
   installNode(args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void
   installManager(args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void
+  installModule(args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void
 }
