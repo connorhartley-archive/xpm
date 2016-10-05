@@ -2,7 +2,6 @@
 
 import blessed = require('blessed');
 import fs = require('fs');
-import path = require('path');
 import _ = require('underscore');
 
 import argumentParser = require('../utils/argumentParser');
@@ -110,8 +109,59 @@ export function install (): Install {
     });
   }
 
-  function installModule () {
-    // Temp
+  function installModule (moduleOpts, args, message, callback) {
+    const installInput = ['install']
+    installInput.push(moduleOpts.path)
+    installInput.push('--runtime=' + store.getPlatformName)
+    installInput.push('--target=' + store.getPlatformVersion)
+    installInput.push('--arch=' + store.getPlatformArch)
+    installInput.push('--verbose')
+
+    _.map(args.flags, function(value: string | boolean, key: string) {
+      if(key.length < 2) {
+        switch(key) {
+          case 'g':
+            break;
+          case 's':
+            break;
+          case 'p':
+            break;
+          default:
+            installInput.push('-' + key + '=' + value)
+        }
+      } else {
+        switch(key) {
+          case 'global':
+            break;
+          case 'save':
+            break;
+          case 'save-dev':
+            break;
+          case 'production':
+            break;
+          default:
+            installInput.push('--' + key + '=' + value)
+        }
+      }
+    })
+
+    const env = _.extend({}, process.env, { HOME: store.getNodeDirectory })
+    env.USERPROFILE  = process.platform !== 'win32' ? env.HOME : null
+
+    const opts = { env, cwd: moduleOpts.path, streaming: true }
+
+    message.add(exports.installPrefix + 'Installing (' + moduleOpts.name + '@' + moduleOpts.version + ') into the shared directory.')
+
+    fs.mkdirSync(store.getPackageDirectory)
+
+    commandExecutor.executeCommand(store.getPackageManagerEntry, installInput, opts, (exitCode, error, output) => {
+      if(exitCode === 0) {
+        message.edit(exports.installPrefix + 'Installed successfully.')
+        callback()
+      } else {
+        callback(output + '\n' + error)
+      }
+    })
   }
 }
 
@@ -120,5 +170,11 @@ export interface Install {
   run(args: argumentParser.ParsedCommand, view: blessed.widget.Screen): void
   installNode(args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void
   installManager(args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void
-  installModule(args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void
+  installModule(module: Module, args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void
+}
+
+export interface Module {
+  name: string;
+  version: string;
+  path: string;
 }
