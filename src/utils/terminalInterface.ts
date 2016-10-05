@@ -15,65 +15,61 @@ export function createMessageBox(view: blessed.widget.Screen): MessageBox {
   function add (text: string, id?: number) {
     if (id === null || id === undefined) {
       id = currentLine;
-      currentLine = (currentLine + 1);
+      currentLine = (currentLine + 1)
     }
 
     if (!message) {
       message = blessed.box({ width: view.width, height: (id + 1), top: 0, left: 'center' })
     }
 
-    message.height = (id + 1);
+    message.height = (id + 1)
 
     const line = blessed.box({ height: 1, top: id, left: 1, right: 1, content: text, tags: true });
 
-    message.append(line);
-    view.append(message);
+    message.append(line)
+    view.append(message)
 
     view.on('resize', function() {
-      message.width = view.width;
-      view.render();
+      message.width = view.width
+      view.render()
     });
 
-    message.show();
-    line.show();
+    message.show()
+    line.show()
 
-    messageText[id] = line;
+    view.render()
 
-    view.render();
-
-    return id;
+    return id
   }
 
   function edit (text: string, id?: number) {
     if (id === null || id === undefined) {
-      id = currentLine;
+      id = currentLine
     }
 
-    const msgTxt = messageText[(id - 1)];
+    const msgTxt = messageText[(id - 1)]
 
-    msgTxt.setContent(text);
-    msgTxt.show();
+    msgTxt.setContent(text)
+    msgTxt.show()
 
-    messageText[(id - 1)] = msgTxt;
+    view.render()
 
-    view.render();
-
-    return id;
+    return id
   }
 
   function remove (id?: number) {
     if (id === null || id === undefined) {
       id = currentLine;
-      currentLine = (currentLine - 1);
+      currentLine = (currentLine - 1)
     }
 
-    const msgTxt = messageText[(id - 1)];
+    const msgTxt = messageText[(id - 1)]
 
-    msgTxt.destroy();
+    msgTxt.destroy()
 
-    view.render();
+    view.render()
 
-    messageText[(id - 1)] = undefined;
+    messageText.splice((id - 1), 1)
   }
 }
 
