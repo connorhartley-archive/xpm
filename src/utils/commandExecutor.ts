@@ -1,7 +1,7 @@
 import child_process = require('child_process')
 
-function execute (env: string, args: string[], callback: ExecutionCallback) {
-  const spawn = child_process.spawn(env, args)
+function execute (env: string, args: string[], options: Object, callback: ExecutionCallback) {
+  const spawn = child_process.spawn(env, args, options)
 
   const errorChunks = []
   const outChunks = []
@@ -24,9 +24,9 @@ function execute (env: string, args: string[], callback: ExecutionCallback) {
   spawn.on('close', done)
 }
 
-export function executeCommand (path, args, callback) {
+export function executeCommand (path, args, options, callback) {
   args.unshift(path)
-  execute(process.execPath, args, callback);
+  execute(process.execPath, args, options, callback);
 }
 
 export interface ExecutionCallback {

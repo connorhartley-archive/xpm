@@ -2,6 +2,7 @@
 
 import blessed = require('blessed');
 import fs = require('fs');
+import path = require('path');
 import _ = require('underscore');
 
 import argumentParser = require('../utils/argumentParser');
@@ -45,15 +46,22 @@ export function install (): Install {
     installInput.push('--ensure')
     installInput.push('--verbose')
 
-    message.edit(exports.setupPrefix + 'Installing node-gyp before called process.')
-
     const env = _.extend({}, process.env, { HOME: store.getNodeDirectory })
     env.USERPROFILE  = process.platform !== 'win32' ? env.HOME : null
 
+    const opts = { env, cwd: store.getResourceDirectory, streaming: true }
+
+    message.add(exports.setupPrefix + 'Installing node-gyp before called process.')
+
     fs.mkdirSync(store.getResourceDirectory)
 
-    commandExecutor.executeCommand(require.resolve('node-gyp/bin/node-gyp'), installInput, (exitCode, error, output) => {
-      // Somehow log error output here with multiple lines. This won't work currently.
+    commandExecutor.executeCommand(require.resolve('node-gyp/bin/node-gyp'), installInput, opts, (exitCode, error, output) => {
+      if(exitCode === 0) {
+        message.edit(exports.setupPrefix + 'Installed node-gyp with success.')
+        callback()
+      } else {
+        callback(output + '\n' + error)
+      }
     })
   }
 
@@ -66,15 +74,41 @@ export function install (): Install {
     installInput.push('--ensure')
     installInput.push('--verbose')
 
-    message.edit(exports.setupPrefix + 'Installing pnpm before called process.')
+    const env = _.extend({}, process.env, { HOME: store.getNodeDirectory })
+    env.USERPROFILE  = process.platform !== 'win32' ? env.HOME : null
+
+    const opts = { env, cwd: store.getPackageManagerDirectory, streaming: true }
+
+    message.add(exports.setupPrefix + 'Installing pnpm before called process.')
 
     fs.mkdirSync(store.getPackageManagerDirectory);
+
+    commandExecutor.executeCommand(require.resolve('npm/bin/npm-cli'), installInput, opts, (exitCode, error, output) => {
+      if(exitCode === 0) {
+        message.edit(exports.setupPrefix + 'Installed pnpm with success.')
+        callback()
+      } else {
+        callback(output + '\n' + error)
+      }
+    });
+
+    message.add(exports.setupPrefix + 'Configuring pnpm before called process.')
+
     fs.mkdirSync(store.getSharedDirectory);
 
-    message.edit(exports.setupPrefix + 'Configuring pnpm before called process.')
+    const pnpm = path.join(store.getPackageManagerDirectory, 'lib', 'bin', 'pnpm')
 
     const sharedInput = ['config', 'set', 'store-path']
     sharedInput.push(store.getSharedDirectory)
+
+    commandExecutor.executeCommand(require.resolve(pnpm), sharedInput, opts, (exitCode, error, output) => {
+      if(exitCode === 0) {
+        message.edit(exports.setupPrefix + 'Configured pnpm with success.')
+        callback()
+      } else {
+        callback(output + '\n' + error)
+      }
+    });
   }
 }
 
