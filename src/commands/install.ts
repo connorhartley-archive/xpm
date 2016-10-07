@@ -1,29 +1,32 @@
 'use strict';
 
-import blessed = require('blessed');
-import fs = require('fs');
-import _ = require('underscore');
+import blessed = require('blessed')
+import fs = require('fs')
+import _ = require('underscore')
 
-import argumentParser = require('../utils/argumentParser');
-import commandExecutor = require('../utils/commandExecutor');
-import store = require('../store');
-import terminalInterface = require('../utils/terminalInterface');
+import argumentParser = require('../utils/argumentParser')
+import buildTools = require('../utils/buildEnv')
+import commandExecutor = require('../utils/commandExecutor')
+import store = require('../store')
+import terminalInterface = require('../utils/terminalInterface')
 
-module.exports = install;
+module.exports = install
 
-export const usage: string = 'install <github_user>/<github_repo> | <package_directory>';
-export const prefix: string = '{blue-fg}♫ xpm{/blue-fg} ';
+export const usage: string = 'install <github_user>/<github_repo> | <package_directory>'
+export const prefix: string = '{blue-fg}♫ xpm{/blue-fg} '
 
-export const installPrefix = prefix + '{yellow-fg}install{/yellow-fg} ';
-export const setupPrefix = prefix + '{yellow-fg}setup{/yellow-fg} ';
+export const installPrefix = prefix + '{yellow-fg}install{/yellow-fg} '
+export const setupPrefix = prefix + '{yellow-fg}setup{/yellow-fg} '
 
 export function install (): Install {
   let currentView = null;
 
   (<Install> run).run = run;
-  (<Install> run).installNode = installNode;
-  (<Install> run).installManager = installManager;
-  (<Install> run).installModule = installModule;
+  (<Install> run)._installNode = _installNode;
+  (<Install> run)._installManager = _installManager;
+  (<Install> run)._installModule = _installModule;
+  (<Install> run)._installModules = _installModules;
+  (<Install> run)._installCommand = _installCommand;
   return <Install> run;
 
   function run (args?, view?) {
@@ -37,8 +40,8 @@ export function install (): Install {
 
   }
 
-  function installNode (args, message, callback) {
-    const installInput = ['install'];
+  function _installNode (args, message, callback) {
+    const installInput = ['install']
     installInput.push('--runtime=' + store.getPlatformName)
     installInput.push('--target=' + store.getPlatformVersion)
     installInput.push('--dist-url=' + store.getPlatformUrl)
@@ -65,7 +68,7 @@ export function install (): Install {
     })
   }
 
-  function installManager (args, message, callback) {
+  function _installManager (args, message, callback) {
     const installInput = ['install']
     installInput.push('--runtime=' + store.getPlatformName)
     installInput.push('--target=' + store.getPlatformVersion)
@@ -109,7 +112,7 @@ export function install (): Install {
     });
   }
 
-  function installModule (moduleOpts, args, message, callback) {
+  function _installModule (moduleOpts, args, message, callback) {
     const installInput = ['install']
     installInput.push(moduleOpts.path)
     installInput.push('--runtime=' + store.getPlatformName)
@@ -122,22 +125,12 @@ export function install (): Install {
         switch(key) {
           case 'g':
             break;
-          case 's':
-            break;
-          case 'p':
-            break;
           default:
             installInput.push('-' + key + '=' + value)
         }
       } else {
         switch(key) {
           case 'global':
-            break;
-          case 'save':
-            break;
-          case 'save-dev':
-            break;
-          case 'production':
             break;
           default:
             installInput.push('--' + key + '=' + value)
@@ -147,6 +140,13 @@ export function install (): Install {
 
     const env = _.extend({}, process.env, { HOME: store.getNodeDirectory })
     env.USERPROFILE  = process.platform !== 'win32' ? env.HOME : null
+
+    const build = buildTools.buildEnv(env)
+    build.addNodeEnv()
+    if (process.platform === 'win32') { build.addWindowsEnv() }
+
+    const vsArgs = build.getVisualStudioFlags()
+    if (vsArgs) { installInput.push(vsArgs) }
 
     const opts = { env, cwd: moduleOpts.path, streaming: true }
 
@@ -163,14 +163,68 @@ export function install (): Install {
       }
     })
   }
+
+  function _installModules (path, args, message, callback) {
+    message.add(exports.installPrefix + 'Installing modules.')
+
+    _installCommand(path, args, message, (exitCode, error, output) => {
+      if(exitCode === 0) {
+        message.edit(exports.installPrefix + 'Installed package.')
+        callback()
+      } else {
+        callback(output + '\n' + error)
+      }
+    })
+  }
+
+  function _installCommand (path, args, message, callback) {
+    const installInput = ['install']
+    installInput.push('--runtime=' + store.getPlatformName)
+    installInput.push('--target=' + store.getPlatformVersion)
+    installInput.push('--arch=' + store.getPlatformArch)
+    installInput.push('--verbose')
+
+    _.map(args.flags, function(value: string | boolean, key: string) {
+      if(key.length < 2) {
+        switch(key) {
+          case 'g':
+            break;
+          default:
+            installInput.push('-' + key + '=' + value)
+        }
+      } else {
+        switch(key) {
+          case 'global':
+            break;
+          default:
+            installInput.push('--' + key + '=' + value)
+        }
+      }
+    })
+
+    const env = _.extend({}, process.env, { HOME: store.getNodeDirectory })
+    const build = buildTools.buildEnv(env)
+    build.addNodeEnv()
+    if (process.platform === 'win32') { build.addWindowsEnv() }
+
+    const vsArgs = build.getVisualStudioFlags()
+    if (vsArgs) { installInput.push(vsArgs) }
+
+    const opts = { env, cwd: path, streaming: true }
+
+    commandExecutor.executeCommand(store.getPackageManagerEntry, installInput, opts, callback)
+  }
 }
 
 export interface Install {
-  (args: argumentParser.ParsedCommand, view: blessed.widget.Screen): void
-  run(args: argumentParser.ParsedCommand, view: blessed.widget.Screen): void
-  installNode(args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void
-  installManager(args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void
-  installModule(module: Module, args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void
+  (args?: argumentParser.ParsedCommand, view?: blessed.widget.Screen): void
+  run(args?: argumentParser.ParsedCommand, view?: blessed.widget.Screen): void
+  _installNode(args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void // Installs NodeGYP
+  _installManager(args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void // Installs PNPM
+  _installModule(module: Module, args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void // Installs a single Module under PNPM
+  _installModules(path: string, args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void // Installs all modules.
+  _installCommand(path: string, args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void // Executes the install command through PNPM at the path.
+  downloadPackage(url: string, callback: Function): void;
 }
 
 export interface Module {
