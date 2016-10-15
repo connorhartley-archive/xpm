@@ -20,7 +20,7 @@
     "blessed": "^0.1.81",
     "log-cb": "^0.2.1",
     "minimist": "^1.2.0",
-    "pnpm": "^0.37.0",
+    "pnpm": "^0.41.0",
     "typescript": "^2.0.3",
     "typings": "^1.4.0",
     "underscore": "^1.8.3",
