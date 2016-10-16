@@ -1,3 +1,5 @@
+'use strict'
+
 import child_process = require('child_process')
 
 function execute (env: string, args: string[], options: Object, callback: ExecutionCallback) {
@@ -24,7 +26,7 @@ function execute (env: string, args: string[], options: Object, callback: Execut
   spawn.on('close', done)
 }
 
-export function executeCommand (path, args, options, callback) {
+export function executeCommand (path: string, args: any, options: any, callback: ExecutionCallback) {
   args.unshift(path)
   execute(process.execPath, args, options, callback);
 }
