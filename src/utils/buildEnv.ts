@@ -1,3 +1,5 @@
+'use strict'
+
 import path = require('path')
 
 import store = require('../store')

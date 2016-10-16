@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import blessed = require('blessed')
 import fs = require('fs')
@@ -26,7 +26,7 @@ export function install (): Install {
   (<Install> run)._installManager = _installManager;
   (<Install> run)._installModule = _installModule;
   (<Install> run)._installModules = _installModules;
-  (<Install> run)._installCommand = _installCommand;
+  (<Install> run)._installGeneral = _installGeneral;
   return <Install> run;
 
   function run (args?, view?) {
@@ -167,7 +167,7 @@ export function install (): Install {
   function _installModules (path, args, message, callback) {
     message.add(exports.installPrefix + 'Installing modules.')
 
-    _installCommand(path, args, message, (exitCode, error, output) => {
+    _installGeneral(path, args, message, (exitCode, error, output) => {
       if(exitCode === 0) {
         message.edit(exports.installPrefix + 'Installed package.')
         callback()
@@ -177,7 +177,7 @@ export function install (): Install {
     })
   }
 
-  function _installCommand (path, args, message, callback) {
+  function _installGeneral (path, args, message, callback) {
     const installInput = ['install']
     installInput.push('--runtime=' + store.getPlatformName)
     installInput.push('--target=' + store.getPlatformVersion)
@@ -214,6 +214,14 @@ export function install (): Install {
 
     commandExecutor.executeCommand(store.getPackageManagerEntry, installInput, opts, callback)
   }
+
+  function downloadGitPackage (url, callback) {
+
+  }
+
+  function installGitPackage (path, callback) {
+
+  }
 }
 
 export interface Install {
@@ -223,8 +231,9 @@ export interface Install {
   _installManager(args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void // Installs PNPM
   _installModule(module: Module, args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void // Installs a single Module under PNPM
   _installModules(path: string, args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void // Installs all modules.
-  _installCommand(path: string, args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void // Executes the install command through PNPM at the path.
-  downloadPackage(url: string, callback: Function): void;
+  _installGeneral(path: string, args: argumentParser.ParsedCommand, message: terminalInterface.MessageBox, callback: Function): void // Executes the install command through PNPM at the path.
+  downloadGitPackage(url: string, callback: Function): void
+  installGitPackage(path: string, callback: Function): void
 }
 
 export interface Module {

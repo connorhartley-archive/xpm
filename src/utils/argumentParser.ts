@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-import minimist = require('minimist');
-import _ = require('underscore');
+import minimist = require('minimist')
+import _ = require('underscore')
 
 export function parse (args: string[]): ParsedCommand {
   const argv: minimist.ParsedArgs = minimist(args);
