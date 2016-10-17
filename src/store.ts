@@ -6,12 +6,13 @@ import fs = require('fs')
 const userHome = require('user-home')
 const xdgBasedir = require('xdg-basedir')
 
-export const getHomeDirectory: string = userHome
-export const getResourceDirectory: string = path.join(xdgBasedir.data, 'xpm') || path.join(getHomeDirectory, '.xpm')
-export const getConfigDirectory: string = path.join(xdgBasedir.config, 'xpm') || path.join(getHomeDirectory, '.xpm', 'config')
+export const getHomeDirectory: string = userHome // Returns the users home directory.
+export const getResourceDirectory: string = path.join(xdgBasedir.data, 'xpm') || path.join(getHomeDirectory, '.xpm') // Returns the xpm resource directory.
+export const getConfigDirectory: string = path.join(xdgBasedir.config, 'xpm') || path.join(getHomeDirectory, '.xpm', 'config') // Returns the xpm config directory.
+export const getCacheDirectory: string = path.join(xdgBasedir.cache, 'xpm') || path.join(getHomeDirectory, '.xpm', 'cache') // Returns the xpm cache directory.
 
 export const getPlatformName: string = process.env.XANITE_PLATFORM_NAME || 'electron'
-export const getPlatformVersion: string = process.env.XANITE_PLATFORM_VERSION || '1.4.2'
+export const getPlatformVersion: string = process.env.XANITE_PLATFORM_VERSION || '1.4.3'
 export const getPlatformUrl: string = process.env.XANITE_PLATFORM_URL || 'https://atom.io/download/atom-shell'
 export const getPlatformArch: string = process.platform === 'darwin' ? 'x64' : (process.platform === 'win32' ? 'ia32' : process.arch)
 

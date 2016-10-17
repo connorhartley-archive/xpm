@@ -11,6 +11,7 @@
     "orchestrator": "registry:dt/orchestrator#0.0.0+20160316155526",
     "q": "registry:dt/q#0.0.0+20161004185634",
     "request": "registry:dt/request#0.0.0+20160726020908",
+    "tmp": "registry:dt/tmp#0.0.0+20160514170650",
     "underscore": "registry:dt/underscore#1.8.3+20160908111004",
     "vinyl": "registry:dt/vinyl#1.2.0+20160924121322"
   }
