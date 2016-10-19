@@ -143,23 +143,27 @@ export function install (): Install {
     executor.executeCommand(store.getPackageManagerEntry, installInput, opts, callback)
   }
 
-  function downloadGitPackage (url, callback) {
+  function  cloneGitPackage (url, callback) {
+    cloneToTemp(function (dir, tmp) {
+      moveFromTemp(dir, function (dir) {
+        callback(dir)
+        tmp.setGracefulCleanup()
+      })
+    })
 
-    function moveFromTemp (path, callback) {
-      mv(path, store.getPackageDirectory)
+    function moveFromTemp (dir, callback) {
+      mv(dir, path.join(store.getPackageDirectory, require(dir + path.delimiter + 'package.json').name), { mkdirp: true }, function (err) {
+        callback(dir)
+      })
     }
 
     function cloneToTemp (callback) {
-      tmp.dir({ dir: store.getCacheDirectory, prefix: 'package_' }, function tempDirCreated(err, path) {
-        git.Clone(url, path).then(function (repository) {
-          return callback(path)
+      var tmp = tmp.dir({ dir: store.getCacheDirectory, prefix: 'package_' }, function tempDirCreated(err, dir) {
+        git.Clone(url, dir).then(function (repository) {
+          callback(dir, tmp)
         })
       })
     }
-  }
-
-  function installGitPackage (path, callback) {
-
   }
 }
 
