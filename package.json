@@ -7,10 +7,11 @@
     "url": "git+https://github.com/xanite/xpm.git"
   },
   "scripts": {
-    "compile": "gulp compile:typescript"
+    "postinstall": "typings install",
+    "compile": "tsc"
   },
   "author": "Connor Hartley <vectrixu+gh@gmail.com",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "private": true,
   "bugs": {
     "url": "https://github.com/xanite/xpm/issues"
