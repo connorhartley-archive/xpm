@@ -22,7 +22,7 @@
     "minimist": "^1.2.0",
     "mv": "^2.1.1",
     "nodegit": "^0.16.0",
-    "tmp": "^0.0.30",
+    "tmp": "^0.0.31",
     "underscore": "^1.8.3",
     "user-home": "^2.0.0",
     "xdg-basedir": "^2.0.0"
